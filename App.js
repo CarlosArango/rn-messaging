@@ -6,8 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
+import React, { useEffect } from 'react';
+import messaging from '@react-native-firebase/messaging';
 import {
   SafeAreaView,
   ScrollView,
@@ -26,7 +26,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
+const Section = ({ children, title }) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -52,12 +52,19 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  useEffect(() => {
+    messaging().getToken().then((token) => {
+      console.info("Token:", token)
+    })
+  }, [])
 
   return (
     <SafeAreaView style={backgroundStyle}>

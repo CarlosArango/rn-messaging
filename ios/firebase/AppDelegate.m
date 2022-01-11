@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <Firebase.h>
+#import "RNFBMessagingModule.h"
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -33,11 +34,17 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
   
   [FIRApp configure];
+  
+  // Use `addCustomPropsToUserProps` to pass in props for initialization of your app
+  // Or pass in `nil` if you have none as per below example
+  // For `withLaunchOptions` please pass in `launchOptions` object
+  NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"firebase"
-                                            initialProperties:nil];
+                                            initialProperties:appProperties];
 
   if (@available(iOS 13.0, *)) {
       rootView.backgroundColor = [UIColor systemBackgroundColor];
